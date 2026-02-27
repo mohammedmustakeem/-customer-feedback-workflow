@@ -1,0 +1,431 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "feedback-form",
+        "formDescription": "geetign feedback from for the prodcut ",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "E-mail",
+              "fieldType": "email",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "name",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "age",
+              "fieldType": "number",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "feedback",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "good"
+                  },
+                  {
+                    "option": "bad"
+                  },
+                  {
+                    "option": "avrage"
+                  }
+                ]
+              },
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        208,
+        48
+      ],
+      "id": "bc86222e-9af6-4702-aba1-814cd0e76b5b",
+      "name": "On form submission",
+      "webhookId": "04c45525-e146-4681-94b2-a22a17c71f62"
+    },
+    {
+      "parameters": {
+        "content": "## I'm a note \nusing the forms ubmission note and asave the formd ata using the googel sheets.\nif cusotmer gives the ooggd give him discount else no dsicount saty neutral"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        256,
+        -368
+      ],
+      "typeVersion": 1,
+      "id": "327decd5-ebf6-4246-b678-e0e498a783e1",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1shKg9nEH9lZJqUFES9ROH18j-BR-K5bNTFMJzCR8XPc",
+          "mode": "list",
+          "cachedResultName": "Inventory_Template",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1shKg9nEH9lZJqUFES9ROH18j-BR-K5bNTFMJzCR8XPc/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 89716440,
+          "mode": "list",
+          "cachedResultName": "Inventory",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1shKg9nEH9lZJqUFES9ROH18j-BR-K5bNTFMJzCR8XPc/edit#gid=89716440"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "E-mail": "={{ $json['E-mail'] }}",
+            "name": "={{ $json.name }}",
+            "age": "={{ $json.age }}",
+            "feedback": "={{ $json.feedback }}",
+            "give discount": "={{ $json['give discount'] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "E-mail",
+              "displayName": "E-mail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "age",
+              "displayName": "age",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "feedback",
+              "displayName": "feedback",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "give discount",
+              "displayName": "give discount",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        880,
+        48
+      ],
+      "id": "21bdcbaa-b05c-40c5-ad0c-d7a4d95776e9",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "q7IJNeEleEPbkmmy",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "7c20c8b9-b46b-4cac-8281-87a0c32b1c39",
+              "leftValue": "={{ $json.feedback }}",
+              "rightValue": "good",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        432,
+        48
+      ],
+      "id": "2f143f02-5250-4bc2-b1d4-5bb73dfc2e60",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "bbd7aa23-9abb-4be2-b09a-46c19f5df84a",
+              "name": "give discount",
+              "value": "yes",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        656,
+        -48
+      ],
+      "id": "ba26da03-3978-4ee9-95c8-d3ee3e2b6375",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2a3dec08-2b72-4341-8f0c-16f8ccad2019",
+              "name": "give discount",
+              "value": "no",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        656,
+        144
+      ],
+      "id": "7969e446-3584-4907-a33d-ac0443afe607",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json['E-mail'] }}",
+        "subject": "Feedback response",
+        "message": "<!DOCTYPE html> <html>   <head>     <meta charset=\"UTF-8\">     <title>Thank You - You Earn a Discount</title>   </head>   <body style=\"font-family: Arial, sans-serif; background-color:#f9f9f9; padding:20px;\">     <div style=\"max-width:600px; margin:auto; background:#ffffff; border:1px solid #ddd; padding:20px; border-radius:8px;\">       <h2 style=\"color:#4CAF50;\">Thank You!</h2>       <h3 style=\"color:#FF5722;\">You Earn a Discount 🎉</h3>       <p style=\"font-size:16px; color:#333;\">         We sincerely appreciate your response. Your feedback means a lot to us.           Here is the coupon code: <strong>10%1321514123211</strong>       </p>       <p style=\"font-size:14px; color:#555;\">         Best regards,<br>         <strong>Your Team</strong>       </p>     </div>   </body> </html>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1312,
+        -32
+      ],
+      "id": "6de883f2-ef86-4ad4-8005-125af094dc81",
+      "name": "Send a message",
+      "webhookId": "3b80cc72-b999-4034-a8bc-e27d65cda2ac",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "MmUqmkHHNSRBngrS",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "e277af5a-83ed-45fd-8856-5fa60d24254a",
+              "leftValue": "={{ $json.feedback }}",
+              "rightValue": "good",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1088,
+        48
+      ],
+      "id": "c28b6f5f-ea7d-42d2-93ed-5e997d141714",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json['E-mail'] }}",
+        "subject": "feedback resply",
+        "message": "<!DOCTYPE html> <html>   <head>     <meta charset=\"UTF-8\">     <title>Thank You</title>   </head>   <body style=\"font-family: Arial, sans-serif; background-color:#f9f9f9; padding:20px;\">     <div style=\"max-width:600px; margin:auto; background:#ffffff; border:1px solid #ddd; padding:20px; border-radius:8px;\">       <h2 style=\"color:#4CAF50;\">Thank You!</h2>       <p style=\"font-size:16px; color:#333;\">         We sincerely appreciate your response. Your feedback means a lot to us.       </p>       <p style=\"font-size:14px; color:#555;\">         Best regards,<br>         <strong>Your Team</strong>       </p>     </div>   </body> </html>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1344,
+        144
+      ],
+      "id": "ae725791-5719-4d66-aaba-d56a8f6334da",
+      "name": "Send a message1",
+      "webhookId": "3b80cc72-b999-4034-a8bc-e27d65cda2ac",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "MmUqmkHHNSRBngrS",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "b157eb5e-e609-41ac-9541-e9e4cc255627",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cf76a8a618254d07a1a288f93286b28218cdeea44c6ccd2c5150d88301d81eb6"
+  },
+  "id": "RXOO5ULbobZG1E4P",
+  "tags": []
+}
